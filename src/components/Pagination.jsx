@@ -5,15 +5,19 @@ import { GetPagination } from "@/utils/GetPagination";
 import styles from "../components/pagination/pagination.module.css";
 
 export const Pagination = () => {
-  const { currentPage, setCurrentPage, limit, total } = useTodoStore();
+  const { currentPage, setCurrentPage, limit, total, loading } = useTodoStore();
   const totalPages = Math.ceil(total / limit);
   const pages = GetPagination();
+
+  if (loading || total === 0) {
+    return null;
+  }
 
   return (
     <div className={styles.pagination}>
       <button
         onClick={() => setCurrentPage(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage === 1 || loading}
       >
         قبلی
       </button>
@@ -27,6 +31,7 @@ export const Pagination = () => {
               <button
                 className={page === currentPage ? styles.active : ""}
                 onClick={() => setCurrentPage(page)}
+                disabled={loading}
               >
                 {page}
               </button>
@@ -37,7 +42,7 @@ export const Pagination = () => {
 
       <button
         onClick={() => setCurrentPage(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || loading}
       >
         بعدی
       </button>
