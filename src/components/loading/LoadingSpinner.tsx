@@ -2,7 +2,11 @@
 
 import styles from "./LoadingSpinner.module.scss";
 
-export const LoadingSpinner = ({ message = "Loading..." }) => {
+export const LoadingSpinner = ({
+  message = "Loading...",
+}: {
+  message?: string;
+}) => {
   return (
     <div className={styles.loadingContainer}>
       <div className={styles.spinner}></div>

@@ -49,11 +49,11 @@ export default function TodoList() {
                 Description: <span>{todo.description}</span>
               </p>
               {/* <Image
-              src={todo.image}
-              alt={`task ${todo.title} image `}
-              width={50}
-              height={50}
-            /> */}
+                src={todo.image}
+                alt={`task ${todo.title} image `}
+                width={50}
+                height={50}
+              /> */}
               <p className={styles.bold}>
                 Image: <span>{todo.image}</span>
               </p>

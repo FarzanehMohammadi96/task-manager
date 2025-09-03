@@ -2,7 +2,7 @@
 
 import styles from "./ErrorMessage.module.scss";
 
-export const ErrorMessage = ({ error }) => {
+export const ErrorMessage = ({ error }: { error: string }) => {
   return (
     <div className={styles.errorContainer}>
       <h3 className={styles.errorTitle}>Something went wrong. Try Again</h3>
