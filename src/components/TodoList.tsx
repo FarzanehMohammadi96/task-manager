@@ -9,7 +9,7 @@ import { ErrorMessage } from "./ErrorMessage";
 import Image from "next/image";
 
 export default function TodoList() {
-  const { todos, fetchTodos, currentPage, limit, loading, error } =
+  const { todos, fetchTodos, deleteTodo, currentPage, limit, loading, error } =
     useTodoStore();
 
   useEffect(() => {
@@ -42,21 +42,31 @@ export default function TodoList() {
         <>
           {todos.map((todo) => (
             <div key={todo.id} className={styles.card}>
-              <p className={styles.bold}>
-                Title: <span>{todo.title}</span>
-              </p>
-              <p className={styles.bold}>
-                Description: <span>{todo.description}</span>
-              </p>
-              {/* <Image
-                src={todo.image}
-                alt={`task ${todo.title} image `}
-                width={50}
-                height={50}
-              /> */}
-              <p className={styles.bold}>
-                Image: <span>{todo.image}</span>
-              </p>
+              <div className={styles.cardContent}>
+                <p className={styles.bold}>
+                  Title: <span>{todo.title}</span>
+                </p>
+                <p className={styles.bold}>
+                  Description: <span>{todo.description}</span>
+                </p>
+                {/* <Image
+                  src={todo.image}
+                  alt={`task ${todo.title} image `}
+                  width={50}
+                  height={50}
+                /> */}
+                <p className={styles.bold}>
+                  Image: <span>{todo.image}</span>
+                </p>
+              </div>
+              <button 
+                className={styles.deleteButton}
+                onClick={() => deleteTodo(todo.id)}
+                disabled={loading}
+                title="Delete task"
+              >
+               Delete
+              </button>
             </div>
           ))}
           <Pagination />

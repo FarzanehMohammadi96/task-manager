@@ -14,5 +14,5 @@ export interface TodoStore {
   error: string | null;
   setCurrentPage: (currentPage: number) => void;
   fetchTodos: (currentPage?: number, limit?: number) => Promise<void>;
-  retryFetch: () => void;
+  deleteTodo: (id: string) => Promise<void>;
 }
