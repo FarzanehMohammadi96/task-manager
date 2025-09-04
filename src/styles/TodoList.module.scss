@@ -38,6 +38,19 @@ $dark-green: #0e8c0e;
     &__content {
         flex: 1;
     }
+
+    &--create {
+        background-color: rgb(245, 245, 248);
+        border: 1px solid rgb(231, 231, 253);
+        box-shadow: 0 6px 15px rgba(62, 62, 76, 0.15);
+        cursor: default;
+        margin-bottom: 20px;
+
+        &:hover {
+            transform: none;
+            box-shadow: none;
+        }
+    }
 }
 
 .bold {
@@ -80,6 +93,12 @@ $dark-green: #0e8c0e;
     gap: 0.5rem;
 }
 
+.actionsRowStart {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
 .button {
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
@@ -108,9 +127,6 @@ $dark-green: #0e8c0e;
         }
     }
 
-
-
-
     &--createNew {
         border: none;
         background: $blue;
@@ -129,5 +145,60 @@ $dark-green: #0e8c0e;
         &:hover {
             background: $dark-green;
         }
+    }
+}
+
+// Responsive 
+@media (max-width: 1024px) {
+    .container {
+        width: 90vw;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100vw;
+        padding: 12px;
+        margin: 0 auto;
+    }
+
+    .card {
+        flex-direction: column;
+        align-items: stretch;
+
+        &__content {
+            width: 100%;
+        }
+    }
+
+    .actionsRow {
+        gap: 8px;
+    }
+
+    .button {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 15px;
+
+        &--createNew {
+            width: 50%
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .bold {
+        font-size: 14px;
+    }
+
+    .input {
+        padding: 10px;
+        font-size: 14px;
     }
 }

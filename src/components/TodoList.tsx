@@ -27,7 +27,7 @@ export default function TodoList() {
   return (
     <div className={styles.container}>
       {!isCreateOpen ? (
-        <div className={styles.actionsRow}>
+        <div className={styles.actionsRowStart}>
           <button
             className={`${styles.button} ${styles["button--createNew"]}`}
             onClick={() => setIsCreateOpen(true)}
@@ -36,7 +36,7 @@ export default function TodoList() {
           </button>
         </div>
       ) : (
-        <div className={styles.card}>
+        <div className={`${styles.card} ${styles["card--create"]}`}>
           <div className={styles["card__content"]}>
             <Form
               onSubmit={handleCreate}
