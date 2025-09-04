@@ -30,7 +30,7 @@ export const Pagination = () => {
             ) : (
               <button
                 className={page === currentPage ? styles.active : ""}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => setCurrentPage(currentPage)}
                 disabled={loading}
               >
                 {page}

@@ -4,6 +4,7 @@ import styles from "../styles/TodoList.module.scss";
 import { useTodoStore } from "../store/todoStore";
 import { Todo } from "@/types/todo";
 import { Form } from "./Form";
+import { toast } from "react-toastify";
 
 type TaskCardProps = {
   todo: Todo;
@@ -14,8 +15,14 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
   const [editing, setEditing] = useState(false);
 
   const handleUpdate = async (data: { title: string; description: string }) => {
-    await updateTodo(todo.id, data);
-    setEditing(false);
+    try {
+      await updateTodo(todo.id, data);
+      setEditing(false);
+      toast.success("با موفقیت ویرایش شد");
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "خطا در ویرایش تسک";
+      toast.error(message);
+    }
   };
 
   return (
@@ -43,7 +50,14 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
           <button className={`${styles.button} ${styles["button--edit"]}`} onClick={() => setEditing(true)} disabled={loading}>
             Edit
           </button>
-          <button className={`${styles.button} ${styles["button--delete"]}`} onClick={() => deleteTodo(todo.id)} disabled={loading}>
+          <button className={`${styles.button} ${styles["button--delete"]}`} onClick={async () => {
+            try {
+              await deleteTodo(todo.id);
+            } catch (e) {
+              const message = e instanceof Error ? e.message : "خطا در حذف تسک";
+              toast.error(message);
+            }
+          }} disabled={loading}>
             Delete
           </button>
         </div>

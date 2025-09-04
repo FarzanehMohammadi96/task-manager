@@ -7,6 +7,7 @@ import { LoadingSpinner } from "./loading/LoadingSpinner";
 import { ErrorMessage } from "./ErrorMessage";
 import { TaskCard } from "./TaskCard";
 import { Form } from "./Form";
+import { toast } from "react-toastify";
 
 export default function TodoList() {
   const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } =
@@ -19,9 +20,21 @@ export default function TodoList() {
   }, [currentPage, limit, fetchTodos]);
 
   const handleCreate = async (data: { title: string; description: string }) => {
-    await createTodo(data);
-    setIsCreateOpen(false);
+    try {
+      await createTodo(data);
+      setIsCreateOpen(false);
+      toast.success("با موفقیت ایجاد شد");
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "خطا در ایجاد تسک";
+      toast.error(message);
+    }
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   if (loading)
     return (
