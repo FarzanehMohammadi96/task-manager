@@ -1,86 +1,36 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import styles from "../styles/TodoList.module.scss";
 import { useTodoStore } from "../store/todoStore";
 import { Pagination } from "./Pagination";
 import { LoadingSpinner } from "./loading/LoadingSpinner";
 import { ErrorMessage } from "./ErrorMessage";
-
-type FormValues = {
-  title: string;
-  description: string;
-};
+import { TaskCard } from "./TaskCard";
+import { Form } from "./Form";
 
 export default function TodoList() {
-  const {
-    todos,
-    fetchTodos,
-    deleteTodo,
-    updateTodo,
-    createTodo,
-    currentPage,
-    limit,
-    loading,
-    error,
-  } = useTodoStore();
-
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [isCreateFormOpen, setIsCreateFormOpen] = useState<boolean>(false);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<FormValues>();
-
-  const {
-    register: registerCreate,
-    handleSubmit: handleSubmitCreate,
-    reset: resetCreate,
-    formState: { errors: createErrors, isSubmitting: isCreating },
-  } = useForm<FormValues>();
+  const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } = useTodoStore();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   useEffect(() => {
     fetchTodos(currentPage, limit);
   }, [currentPage, limit, fetchTodos]);
 
-  const onSubmit = async (data: FormValues) => {
-    if (!editingId) return;
-    await updateTodo(editingId, data);
-    setEditingId(null);
-    reset();
+  const handleCreate = async (data: { title: string; description: string }) => {
+    await createTodo(data);
+    setIsCreateOpen(false);
   };
 
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <LoadingSpinner message="Loading tasks..." />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.container}>
-        <ErrorMessage error={error} />
-      </div>
-    );
-  }
+  if (loading) return <div className={styles.container}><LoadingSpinner message="Loading tasks..." /></div>;
+  if (error) return <div className={styles.container}><ErrorMessage error={error} /></div>;
 
   return (
     <div className={styles.container}>
-      {!isCreateFormOpen ? (
+      {!isCreateOpen ? (
         <div className={styles.actionsRow}>
           <button
-            type="button"
             className={`${styles.button} ${styles["button--createNew"]}`}
-            onClick={() => {
-              resetCreate();
-              setIsCreateFormOpen(true);
-            }}
+            onClick={() => setIsCreateOpen(true)}
           >
             Create New Task
           </button>
@@ -88,176 +38,23 @@ export default function TodoList() {
       ) : (
         <div className={styles.card}>
           <div className={styles["card__content"]}>
-            <form
-              onSubmit={handleSubmitCreate(async (data) => {
-                await createTodo({ title: data.title, description: data.description });
-                resetCreate();
-                setIsCreateFormOpen(false);
-              })}
-            >
-              <label className={styles.bold}>
-                Title:
-                <input
-                  className={styles.input}
-                  {...registerCreate("title", {
-                    required: "Title is required",
-                    minLength: { value: 3, message: "Title must be at least 3 characters" },
-                  })}
-                  disabled={loading || isCreating}
-                  placeholder="Enter title"
-                />
-              </label>
-              {createErrors.title && (
-                <p className={styles.error}>{createErrors.title.message}</p>
-              )}
-
-              <label className={styles.bold}>
-                Description:
-                <input
-                  className={styles.input}
-                  {...registerCreate("description", { required: "Description is required" })}
-                  disabled={loading || isCreating}
-                  placeholder="Enter description"
-                />
-              </label>
-              {createErrors.description && (
-                <p className={styles.error}>{createErrors.description.message}</p>
-              )}
-
-              <div className={styles.actionsRow}>
-                <button
-                  type="submit"
-                  className={`${styles.button} ${styles["button--save"]}`}
-                  disabled={loading || isCreating}
-                  title="Create task"
-                >
-                  Create
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.button} ${styles["button--delete"]}`}
-                  onClick={() => {
-                    resetCreate();
-                    setIsCreateFormOpen(false);
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <Form
+              onSubmit={handleCreate}
+              onCancel={() => setIsCreateOpen(false)}
+            />
           </div>
         </div>
       )}
-      
+
       {todos.length === 0 ? (
         <div className={styles.emptyState}>
           <p>No tasks found. Create a new task.</p>
         </div>
       ) : (
-        <>
-          {todos.map((todo) => (
-            <div key={todo.id} className={styles.card}>
-              <div className={styles["card__content"]}>
-                {editingId === todo.id ? (
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <label className={styles.bold}>
-                      Title:
-                      <input
-                        className={styles.input}
-                        {...register("title", {
-                          required: "Title is required",
-                          minLength: {
-                            value: 3,
-                            message: "Title must be at least 3 characters",
-                          },
-                        })}
-                        defaultValue={todo.title}
-                        disabled={loading}
-                      />
-                    </label>
-                    {errors.title && (
-                      <p className={styles.error}>{errors.title.message}</p>
-                    )}
-
-                    <label className={styles.bold}>
-                      Description:
-                      <input
-                        className={styles.input}
-                        {...register("description")}
-                        defaultValue={todo.description}
-                        disabled={loading}
-                      />
-                    </label>
-
-                    <div className={styles.actionsRow}>
-                      <button
-                        type="submit"
-                        className={`${styles.button} ${styles["button--save"]}`}
-                        disabled={loading || isSubmitting}
-                        title="Save changes"
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="button"
-                        className={`${styles.button} ${styles["button--delete"]}`}
-                        onClick={() => {
-                          setEditingId(null);
-                          reset();
-                        }}
-                        disabled={loading}
-                        title="Cancel editing"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                  <>
-                    <p className={styles.bold}>
-                      Title: <span>{todo.title}</span>
-                    </p>
-                    <p className={styles.bold}>
-                      Description: <span>{todo.description}</span>
-                    </p>
-                    <p className={styles.bold}>
-                      Image: <span>{todo.image}</span>
-                    </p>
-                  </>
-                )}
-              </div>
-
-              {editingId !== todo.id && (
-                <div className={styles.actionsRow}>
-                  <button
-                    className={`${styles.button} ${styles["button--edit"]}`}
-                    onClick={() => {
-                      setEditingId(todo.id);
-                      reset({
-                        title: todo.title,
-                        description: todo.description,
-                      });
-                    }}
-                    disabled={loading}
-                    title="Edit task"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className={`${styles.button} ${styles["button--delete"]}`}
-                    onClick={() => deleteTodo(todo.id)}
-                    disabled={loading}
-                    title="Delete task"
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-          <Pagination />
-        </>
+        todos.map((todo) => <TaskCard key={todo.id} todo={todo} />)
       )}
+
+      <Pagination />
     </div>
   );
 }
