@@ -9,8 +9,10 @@ import { TaskCard } from "./TaskCard";
 import { Form } from "./Form";
 
 export default function TodoList() {
-  const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } = useTodoStore();
+  const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } =
+    useTodoStore();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchTodos(currentPage, limit);
@@ -21,11 +23,34 @@ export default function TodoList() {
     setIsCreateOpen(false);
   };
 
-  if (loading) return <div className={styles.container}><LoadingSpinner message="Loading tasks..." /></div>;
-  if (error) return <div className={styles.container}><ErrorMessage error={error} /></div>;
+  if (loading)
+    return (
+      <div className={styles.container}>
+        <LoadingSpinner message="Loading tasks..." />
+      </div>
+    );
+  if (error)
+    return (
+      <div className={styles.container}>
+        <ErrorMessage error={error} />
+      </div>
+    );
+
+  const filteredTodos = searchQuery.trim()
+    ? todos.filter((todo) =>
+        todo.title.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      )
+    : todos;
 
   return (
     <div className={styles.container}>
+      <input
+        className={styles.input}
+        placeholder="Search titles..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        aria-label="Search by title"
+      />
       {!isCreateOpen ? (
         <div className={styles.actionsRowStart}>
           <button
@@ -46,12 +71,16 @@ export default function TodoList() {
         </div>
       )}
 
-      {todos.length === 0 ? (
+      {filteredTodos.length === 0 ? (
         <div className={styles.emptyState}>
-          <p>No tasks found. Create a new task.</p>
+          <p>
+            {searchQuery
+              ? "No tasks match."
+              : "No tasks found. Create a new task."}
+          </p>
         </div>
       ) : (
-        todos.map((todo) => <TaskCard key={todo.id} todo={todo} />)
+        filteredTodos.map((todo) => <TaskCard key={todo.id} todo={todo} />)
       )}
 
       <Pagination />
