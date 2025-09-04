@@ -10,6 +10,7 @@ type TaskFormProps = {
   onSubmit: (data: FormValues) => Promise<void>;
   onCancel: () => void;
   submitting?: boolean;
+  submitLabel?: string;
 };
 
 export const Form: FC<TaskFormProps> = ({
@@ -17,6 +18,7 @@ export const Form: FC<TaskFormProps> = ({
   onSubmit,
   onCancel,
   submitting,
+  submitLabel 
 }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     defaultValues: initialValues,
@@ -45,8 +47,12 @@ export const Form: FC<TaskFormProps> = ({
       {errors.description && <p className={styles.error}>{errors.description.message}</p>}
 
       <div className={styles.actionsRow}>
-        <button type="submit" className={`${styles.button} ${styles["button--save"]}`} disabled={submitting}>
-          Save
+        <button
+          type="submit"
+          className={`${styles.button} ${submitLabel === "Edit" ? styles["button--editPrimary"] : styles["button--save"]}`}
+          disabled={submitting}
+        >
+          {submitLabel}
         </button>
         <button type="button" className={`${styles.button} ${styles["button--delete"]}`} onClick={onCancel} disabled={submitting}>
           Cancel

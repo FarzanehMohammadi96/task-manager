@@ -146,6 +146,16 @@ $dark-green: #0e8c0e;
             background: $dark-green;
         }
     }
+
+    &--editPrimary {
+        border: none;
+        background: $blue;
+        color: #fff;
+
+        &:hover {
+            background: $dark-blue;
+        }
+    }
 }
 
 // Responsive 

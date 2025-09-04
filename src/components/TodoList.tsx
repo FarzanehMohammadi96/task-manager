@@ -66,6 +66,7 @@ export default function TodoList() {
             <Form
               onSubmit={handleCreate}
               onCancel={() => setIsCreateOpen(false)}
+              submitLabel="Create"
             />
           </div>
         </div>

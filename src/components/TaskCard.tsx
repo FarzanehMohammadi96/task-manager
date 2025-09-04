@@ -27,6 +27,7 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
             onSubmit={handleUpdate}
             onCancel={() => setEditing(false)}
             submitting={loading}
+            submitLabel="Edit"
           />
         ) : (
           <>
