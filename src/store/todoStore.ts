@@ -54,6 +54,48 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
     }
   },
 
+  createTodo: async (payload: { title: string; description: string }) => {
+    set({ loading: true, error: null });
+
+    try {
+      const res = await fetch(
+        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: payload.title,
+            description: payload.description,
+            image: "",
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`error status: ${res.status}`);
+      }
+
+      const created: Todo = await res.json();
+
+      const { todos, total } = get();
+      set({
+        todos: [created, ...todos],
+        total: total + 1,
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      console.error('Error creating:', error);
+      set({
+        loading: false,
+        error:
+          error instanceof Error ? error.message : 'Failed to create new task. Please try again.',
+      });
+    }
+  },
+
   deleteTodo: async (id: string) => {
     set({ loading: true, error: null });
 

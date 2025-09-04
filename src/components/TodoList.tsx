@@ -19,6 +19,7 @@ export default function TodoList() {
     fetchTodos,
     deleteTodo,
     updateTodo,
+    createTodo,
     currentPage,
     limit,
     loading,
@@ -26,12 +27,20 @@ export default function TodoList() {
   } = useTodoStore();
 
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isCreateFormOpen, setIsCreateFormOpen] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
+  } = useForm<FormValues>();
+
+  const {
+    register: registerCreate,
+    handleSubmit: handleSubmitCreate,
+    reset: resetCreate,
+    formState: { errors: createErrors, isSubmitting: isCreating },
   } = useForm<FormValues>();
 
   useEffect(() => {
@@ -63,6 +72,83 @@ export default function TodoList() {
 
   return (
     <div className={styles.container}>
+      {!isCreateFormOpen ? (
+        <div className={styles.actionsRow}>
+          <button
+            type="button"
+            className={`${styles.button} ${styles["button--createNew"]}`}
+            onClick={() => {
+              resetCreate();
+              setIsCreateFormOpen(true);
+            }}
+          >
+            Create New Task
+          </button>
+        </div>
+      ) : (
+        <div className={styles.card}>
+          <div className={styles["card__content"]}>
+            <form
+              onSubmit={handleSubmitCreate(async (data) => {
+                await createTodo({ title: data.title, description: data.description });
+                resetCreate();
+                setIsCreateFormOpen(false);
+              })}
+            >
+              <label className={styles.bold}>
+                Title:
+                <input
+                  className={styles.input}
+                  {...registerCreate("title", {
+                    required: "Title is required",
+                    minLength: { value: 3, message: "Title must be at least 3 characters" },
+                  })}
+                  disabled={loading || isCreating}
+                  placeholder="Enter title"
+                />
+              </label>
+              {createErrors.title && (
+                <p className={styles.error}>{createErrors.title.message}</p>
+              )}
+
+              <label className={styles.bold}>
+                Description:
+                <input
+                  className={styles.input}
+                  {...registerCreate("description", { required: "Description is required" })}
+                  disabled={loading || isCreating}
+                  placeholder="Enter description"
+                />
+              </label>
+              {createErrors.description && (
+                <p className={styles.error}>{createErrors.description.message}</p>
+              )}
+
+              <div className={styles.actionsRow}>
+                <button
+                  type="submit"
+                  className={`${styles.button} ${styles["button--save"]}`}
+                  disabled={loading || isCreating}
+                  title="Create task"
+                >
+                  Create
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.button} ${styles["button--delete"]}`}
+                  onClick={() => {
+                    resetCreate();
+                    setIsCreateFormOpen(false);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      
       {todos.length === 0 ? (
         <div className={styles.emptyState}>
           <p>No tasks found. Create a new task.</p>

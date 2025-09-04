@@ -1,11 +1,13 @@
 // color variables
 $blue: #3b82f6;
-$red: #ff4d4f;
-$green: #0db50d;
+$dark-blue: #2b60b6;
 $light-blue: #eaf2fe;
-$light-red: #fcf1f1;
-$dark-green: #0e8c0e;
 
+$red: #ff4d4f;
+$light-red: #fcf1f1;
+
+$green: #0db50d;
+$dark-green: #0e8c0e;
 
 .container {
     display: flex;
@@ -103,6 +105,19 @@ $dark-green: #0e8c0e;
 
         &:hover {
             background: $light-red
+        }
+    }
+
+
+
+
+    &--createNew {
+        border: none;
+        background: $blue;
+        color: #fff;
+
+        &:hover {
+            background: $dark-blue;
         }
     }
 
