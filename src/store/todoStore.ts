@@ -9,7 +9,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
   loading: false,
   error: null,
   setCurrentPage: (currentPage: number) => set({ currentPage }),
-  
+
   fetchTodos: async (currentPage = 1, limit = 10) => {
     set({ loading: true, error: null });
 
@@ -91,7 +91,52 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
         error:
           error instanceof Error
             ? error.message
-            : "Failed to delete. Please try again.",
+            : "Failed to delete task. Please try again.",
+      });
+    }
+  },
+
+  updateTodo: async (
+    id: string,
+    updates: { title: string; description: string }
+  ) => {
+    set({ loading: true, error: null });
+
+    try {
+      const res = await fetch(
+        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: updates.title,
+            description: updates.description,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`error status: ${res.status}`);
+      }
+
+      const updated = await res.json();
+
+      const { todos } = get();
+      const nextTodos = todos.map((todoItem) =>
+        todoItem.id === id ? { ...todoItem, ...updated } : todoItem
+      );
+
+      set({ todos: nextTodos, loading: false, error: null });
+    } catch (error) {
+      console.error("Error updating:", error);
+      set({
+        loading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update. Please try again.",
       });
     }
   },

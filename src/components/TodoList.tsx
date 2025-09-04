@@ -1,20 +1,49 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import styles from "../styles/TodoList.module.scss";
 import { useTodoStore } from "../store/todoStore";
 import { Pagination } from "./Pagination";
 import { LoadingSpinner } from "./loading/LoadingSpinner";
 import { ErrorMessage } from "./ErrorMessage";
-import Image from "next/image";
+
+type FormValues = {
+  title: string;
+  description: string;
+};
 
 export default function TodoList() {
-  const { todos, fetchTodos, deleteTodo, currentPage, limit, loading, error } =
-    useTodoStore();
+  const {
+    todos,
+    fetchTodos,
+    deleteTodo,
+    updateTodo,
+    currentPage,
+    limit,
+    loading,
+    error,
+  } = useTodoStore();
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>();
 
   useEffect(() => {
     fetchTodos(currentPage, limit);
   }, [currentPage, limit, fetchTodos]);
+
+  const onSubmit = async (data: FormValues) => {
+    if (!editingId) return;
+    await updateTodo(editingId, data);
+    setEditingId(null);
+    reset();
+  };
 
   if (loading) {
     return (
@@ -42,31 +71,102 @@ export default function TodoList() {
         <>
           {todos.map((todo) => (
             <div key={todo.id} className={styles.card}>
-              <div className={styles.cardContent}>
-                <p className={styles.bold}>
-                  Title: <span>{todo.title}</span>
-                </p>
-                <p className={styles.bold}>
-                  Description: <span>{todo.description}</span>
-                </p>
-                {/* <Image
-                  src={todo.image}
-                  alt={`task ${todo.title} image `}
-                  width={50}
-                  height={50}
-                /> */}
-                <p className={styles.bold}>
-                  Image: <span>{todo.image}</span>
-                </p>
+              <div className={styles["card__content"]}>
+                {editingId === todo.id ? (
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <label className={styles.bold}>
+                      Title:
+                      <input
+                        className={styles.input}
+                        {...register("title", {
+                          required: "Title is required",
+                          minLength: {
+                            value: 3,
+                            message: "Title must be at least 3 characters",
+                          },
+                        })}
+                        defaultValue={todo.title}
+                        disabled={loading}
+                      />
+                    </label>
+                    {errors.title && (
+                      <p className={styles.error}>{errors.title.message}</p>
+                    )}
+
+                    <label className={styles.bold}>
+                      Description:
+                      <input
+                        className={styles.input}
+                        {...register("description")}
+                        defaultValue={todo.description}
+                        disabled={loading}
+                      />
+                    </label>
+
+                    <div className={styles.actionsRow}>
+                      <button
+                        type="submit"
+                        className={`${styles.button} ${styles["button--save"]}`}
+                        disabled={loading || isSubmitting}
+                        title="Save changes"
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.button} ${styles["button--delete"]}`}
+                        onClick={() => {
+                          setEditingId(null);
+                          reset();
+                        }}
+                        disabled={loading}
+                        title="Cancel editing"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <p className={styles.bold}>
+                      Title: <span>{todo.title}</span>
+                    </p>
+                    <p className={styles.bold}>
+                      Description: <span>{todo.description}</span>
+                    </p>
+                    <p className={styles.bold}>
+                      Image: <span>{todo.image}</span>
+                    </p>
+                  </>
+                )}
               </div>
-              <button 
-                className={styles.deleteButton}
-                onClick={() => deleteTodo(todo.id)}
-                disabled={loading}
-                title="Delete task"
-              >
-               Delete
-              </button>
+
+              {editingId !== todo.id && (
+                <div className={styles.actionsRow}>
+                  <button
+                    className={`${styles.button} ${styles["button--edit"]}`}
+                    onClick={() => {
+                      setEditingId(todo.id);
+                      reset({
+                        title: todo.title,
+                        description: todo.description,
+                      });
+                    }}
+                    disabled={loading}
+                    title="Edit task"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={`${styles.button} ${styles["button--delete"]}`}
+                    onClick={() => deleteTodo(todo.id)}
+                    disabled={loading}
+                    title="Delete task"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
           ))}
           <Pagination />

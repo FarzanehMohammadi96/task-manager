@@ -1,32 +1,41 @@
+// color variables
+$blue: #3b82f6;
+$red: #ff4d4f;
+$green: #0db50d;
+$light-blue: #eaf2fe;
+$light-red: #fcf1f1;
+$dark-green: #0e8c0e;
+
+
 .container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding: 10px;
+    gap: 16px;
+    padding: 16px;
     width: 70vw;
-    margin: 20px auto;
+    margin: 16px auto;
 }
 
 .card {
-    background: white;
-    padding: 15px;
+    background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 15px;
+    padding: 16px;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
     &:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     }
-}
 
-.cardContent {
-    flex: 1;
+    &__content {
+        flex: 1;
+    }
 }
 
 .bold {
@@ -37,6 +46,20 @@
     }
 }
 
+.input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+    margin: 8px 0;
+
+    &:focus {
+        outline: none;
+        border-color: $blue;
+        box-shadow: 0 0 0 3px rgba($blue, 0.2);
+    }
+}
+
 .emptyState {
     display: flex;
     align-items: center;
@@ -44,25 +67,52 @@
     padding: 3rem;
     text-align: center;
     color: #666;
-    font-size: 1.1rem;
-    background-color: #f9f9f9;
+    background: #f9f9f9;
     border-radius: 12px;
     border: 2px dashed #ddd;
 }
 
+.actionsRow {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
 
-.deleteButton {
-    border: 1px solid red;
-    color: red;
+.button {
     border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
+    padding: 0.5rem 0.75rem;
     font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
 
-    &:hover {
-        background: rgb(250, 229, 229);
+    &--edit {
+        border: 1px solid $blue;
+        color: $blue;
+
+        &:hover {
+            background: $light-blue
+        }
+    }
+
+    &--delete {
+        border: 1px solid $red;
+        color: $red;
+
+        &:hover {
+            background: $light-red
+        }
+    }
+
+    &--save {
+        border: none;
+        background: $green;
+        color: #fff;
+
+        &:hover {
+            background: $dark-green;
+        }
     }
 }
