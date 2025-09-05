@@ -1,13 +1,13 @@
 "use client";
 
 import { useTodoStore } from "@/store/todoStore";
-import { GetPagination } from "@/utils/GetPagination";
+import { getPagination } from '@/utils/getPagination';
 import styles from "../components/pagination/pagination.module.css";
 
 export const Pagination = () => {
   const { currentPage, setCurrentPage, limit, total, loading } = useTodoStore();
   const totalPages = Math.ceil(total / limit);
-  const pages = GetPagination();
+  const pages = getPagination(currentPage, limit, total);
 
   if (loading || total === 0) {
     return null;
@@ -30,7 +30,7 @@ export const Pagination = () => {
             ) : (
               <button
                 className={page === currentPage ? styles.active : ""}
-                onClick={() => setCurrentPage(currentPage)}
+                onClick={() => setCurrentPage(page as number)}
                 disabled={loading}
               >
                 {page}

@@ -1,8 +1,4 @@
-"use client";
-import { useTodoStore } from "@/store/todoStore";
-
-export const GetPagination = () => {
-  const { currentPage, limit, total } = useTodoStore();
+export const getPagination = (currentPage, limit, total) => {
   const totalPages = Math.ceil(total / limit);
 
   const pages = [];
