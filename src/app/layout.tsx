@@ -32,11 +32,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <div
-            style={{ display: "flex", justifyContent: "flex-end", padding: 12 }}
-          >
-            <ThemeToggle />
-          </div>
           {children}
           <ToastProvider />
         </ThemeProvider>

@@ -15,7 +15,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
 
     try {
       const res = await fetch(
-        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks?page=${currentPage}&limit=${limit}`
+        `https://68baa63184055bce63efb8ee.mockapi.io/tasks?page=${currentPage}&limit=${limit}`
       );
 
       if (!res.ok) {
@@ -25,7 +25,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
       const data: Todo[] = await res.json();
 
       const paginationTotal = await fetch(
-        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks`
+        `https://68baa63184055bce63efb8ee.mockapi.io/tasks`
       );
 
       if (!paginationTotal.ok) {
@@ -59,7 +59,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
 
     try {
       const res = await fetch(
-        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks`,
+        `https://68baa63184055bce63efb8ee.mockapi.io/tasks`,
         {
           method: 'POST',
           headers: {
@@ -101,7 +101,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
 
     try {
       const res = await fetch(
-        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks/${id}`,
+        `https://68baa63184055bce63efb8ee.mockapi.io/tasks/${id}`,
         {
           method: "DELETE",
         }
@@ -146,7 +146,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
 
     try {
       const res = await fetch(
-        `https://6166c3df13aa1d00170a66b9.mockapi.io/tasks/${id}`,
+        `https://68baa63184055bce63efb8ee.mockapi.io/tasks/${id}`,
         {
           method: "PUT",
           headers: {

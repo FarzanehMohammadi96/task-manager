@@ -8,6 +8,7 @@ import { ErrorMessage } from "./ErrorMessage";
 import { TaskCard } from "./TaskCard";
 import { Form } from "./Form";
 import { toast } from "react-toastify";
+import { ThemeToggle } from "./theme/ThemeToggle";
 
 export default function TodoList() {
   const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } =
@@ -57,20 +58,15 @@ export default function TodoList() {
 
   return (
     <div className={styles.container}>
-      <input
-        className={styles.input}
-        placeholder="Search titles..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        aria-label="Search by title"
-      />
       {!isCreateOpen ? (
         <div className={styles.actionsRowStart}>
+               <ThemeToggle />
           <button
             className={`${styles.button} ${styles["button--createNew"]}`}
             onClick={() => setIsCreateOpen(true)}
           >
-            Create New Task
+            <i className="fa-solid fa-plus"></i>
+            <span style={{ marginLeft: "5px" }}> Create New Task</span>
           </button>
         </div>
       ) : (
@@ -84,7 +80,13 @@ export default function TodoList() {
           </div>
         </div>
       )}
-
+      <input
+        className={styles.input}
+        placeholder="Search titles..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        aria-label="Search by title"
+      />
       {filteredTodos.length === 0 ? (
         <div className={styles.emptyState}>
           <p>

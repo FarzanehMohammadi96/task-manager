@@ -5,6 +5,7 @@ import { useTodoStore } from "../store/todoStore";
 import { Todo } from "@/types/todo";
 import { Form } from "./Form";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 type TaskCardProps = {
   todo: Todo;
@@ -37,28 +38,56 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
             submitLabel="Edit"
           />
         ) : (
-          <>
-            <p className={styles.bold}>Title: <span>{todo.title}</span></p>
-            <p className={styles.bold}>Description: <span>{todo.description}</span></p>
-            <p className={styles.bold}>Image: <span>{todo.image}</span></p>
-          </>
+          <div className={styles.dataWrapper}>
+            <div className={styles.imageWrapper}>
+              <Image
+                src={todo.image}
+                alt=""
+                style={{ objectFit: "cover" }}
+                sizes="60px"
+                width={100}
+                height={120}
+              />
+            </div>
+
+            <div>
+              <p className={styles.bold}>
+                Title: <span>{todo.title}</span>
+              </p>
+              <p className={styles.bold}>
+                Description: <span>{todo.description}</span>
+              </p>
+              <p className={styles.bold}>
+                Image: <span>{todo.image}</span>
+              </p>
+            </div>
+          </div>
         )}
       </div>
 
       {!editing && (
         <div className={styles.actionsRow}>
-          <button className={`${styles.button} ${styles["button--edit"]}`} onClick={() => setEditing(true)} disabled={loading}>
-            Edit
+          <button
+            className={`${styles.button} ${styles["button--edit"]}`}
+            onClick={() => setEditing(true)}
+            disabled={loading}
+          >
+            <i className="fa-solid fa-pen-to-square"></i>
           </button>
-          <button className={`${styles.button} ${styles["button--delete"]}`} onClick={async () => {
-            try {
-              await deleteTodo(todo.id);
-            } catch (e) {
-              const message = e instanceof Error ? e.message : "خطا در حذف تسک";
-              toast.error(message);
-            }
-          }} disabled={loading}>
-            Delete
+          <button
+            className={`${styles.button} ${styles["button--delete"]}`}
+            onClick={async () => {
+              try {
+                await deleteTodo(todo.id);
+              } catch (e) {
+                const message =
+                  e instanceof Error ? e.message : "خطا در حذف تسک";
+                toast.error(message);
+              }
+            }}
+            disabled={loading}
+          >
+            <i className="fa-solid fa-trash"></i>
           </button>
         </div>
       )}

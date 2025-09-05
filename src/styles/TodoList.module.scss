@@ -97,18 +97,41 @@ $dark-mode-lighter-gray : "#c8c8c8";
 .actionsRow {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 8px;
 }
 
 .actionsRowStart {
     display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
+    justify-content: space-between;
 }
+
+.dataWrapper {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.imageWrapper {
+    width: 100px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+        display: block;
+    }
+}
+
 
 .button {
     border-radius: 8px;
-    padding: 0.5rem 0.75rem;
+    padding: 8px;
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -119,6 +142,7 @@ $dark-mode-lighter-gray : "#c8c8c8";
     &--edit {
         border: 1px solid $blue;
         color: $blue;
+        padding: 10px;
 
         &:hover {
             background: $light-blue
@@ -227,6 +251,11 @@ $dark-mode-lighter-gray : "#c8c8c8";
         width: 90vw;
         padding: 12px;
     }
+
+    .dataWrapper {
+        justify-content: flex-start;
+        gap: 10px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -245,17 +274,29 @@ $dark-mode-lighter-gray : "#c8c8c8";
         }
     }
 
+    .dataWrapper {
+        display: flex;
+        flex-direction: column;
+ 
+    }
+
+    .imageWrapper {
+    width: 80vw;
+    height: 100px;
+     margin: 0 auto;
+    }
+
     .actionsRow {
         gap: 8px;
     }
 
     .button {
         width: 100%;
-        padding: 0.75rem 1rem;
+        padding: 14px;
         font-size: 15px;
 
         &--createNew {
-            width: 50%
+            width: 70%
         }
     }
 }
@@ -265,6 +306,14 @@ $dark-mode-lighter-gray : "#c8c8c8";
         gap: 12px;
         padding: 10px;
     }
+
+    .dataWrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
 
     .bold {
         font-size: 14px;
