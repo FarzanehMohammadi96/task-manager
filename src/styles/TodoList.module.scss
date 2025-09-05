@@ -9,6 +9,11 @@ $light-red: #fcf1f1;
 $green: #0db50d;
 $dark-green: #0e8c0e;
 
+$dark-mode-text-color : "#e6e6e6";
+$dark-mode-dark-gray: "#0c0e12";
+$light-gray: "#2a2a2a";
+$dark-mode-lighter-gray : "#c8c8c8";
+
 .container {
     display: flex;
     flex-direction: column;
@@ -41,7 +46,7 @@ $dark-green: #0e8c0e;
 
     &--create {
         background-color: rgb(245, 245, 248);
-        border: 1px solid rgb(231, 231, 253);
+        border: 2px dashed rgb(173, 173, 173);
         box-shadow: 0 6px 15px rgba(62, 62, 76, 0.15);
         cursor: default;
         margin-bottom: 20px;
@@ -58,6 +63,7 @@ $dark-green: #0e8c0e;
 
     span {
         font-weight: normal;
+        color: $light-gray;
     }
 }
 
@@ -67,6 +73,7 @@ $dark-green: #0e8c0e;
     padding: 8px;
     width: 100%;
     margin: 8px 0;
+    color: $light-gray;
 
     &:focus {
         outline: none;
@@ -154,6 +161,62 @@ $dark-green: #0e8c0e;
 
         &:hover {
             background: $dark-blue;
+        }
+    }
+}
+
+:global(.dark) {
+    .card {
+        background: #111318;
+        box-shadow: 0 4px 10px rgba(42, 42, 42, 0.4);
+
+        &--create {
+            background-color: $dark-mode-text-color;
+            border: 2px dashed rgb(231, 231, 253);
+
+        }
+    }
+
+
+    .bold {
+        color: $dark-mode-text-color span {
+            color: $dark-mode-lighter-gray;
+        }
+    }
+
+    .input {
+        border-color: $light-gray;
+        background: $dark-mode-dark-gray;
+        color: $dark-mode-text-color;
+
+        &:focus {
+            color: $dark-mode-text-color;
+            border-color: $blue;
+            box-shadow: 0 0 0 3px rgba($blue, 0.25);
+        }
+    }
+
+    .emptyState {
+        color: $dark-mode-lighter-gray;
+        background: $dark-mode-dark-gray;
+        border-color: $light-gray;
+    }
+
+    .button {
+        &--edit {
+            color: $light-blue;
+            border-color: $light-blue;
+        }
+
+        &--delete {
+            color: $red;
+            border-color: $red;
+
+            &:hover {
+                color: $red;
+                border-color: $red;
+                background-color: rgb(70, 20, 20);
+            }
         }
     }
 }

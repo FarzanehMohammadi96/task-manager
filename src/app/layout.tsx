@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ToastProvider";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +31,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <ToastProvider />
+        <ThemeProvider>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", padding: 12 }}
+          >
+            <ThemeToggle />
+          </div>
+          {children}
+          <ToastProvider />
+        </ThemeProvider>
       </body>
     </html>
   );
