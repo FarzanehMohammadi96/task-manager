@@ -13,6 +13,10 @@ export interface TodoStore {
   loading: boolean;
   error: string | null;
   setCurrentPage: (currentPage: number) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  setTodos: (todos: Todo[]) => void;
+  setTotal: (total: number) => void;
   fetchTodos: (currentPage?: number, limit?: number) => Promise<void>;
   deleteTodo: (id: string) => Promise<void>;
   updateTodo: (id: string, updates: { title: string; description: string }) => Promise<void>;

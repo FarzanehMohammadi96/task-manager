@@ -1,14 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styles from "../styles/TodoList.module.scss";
 import { useTodoStore } from "../store/todoStore";
 import { Pagination } from "./Pagination";
 import { LoadingSpinner } from "./loading/LoadingSpinner";
-import { ErrorMessage } from "./ErrorMessage";
+import { ErrorMessage } from "./error-handling/ErrorMessage";
 import { TaskCard } from "./TaskCard";
 import { Form } from "./Form";
+import { SearchInput } from "./SearchInput";
+import { EmptyState } from "./EmptyState";
 import { toast } from "react-toastify";
-import { ThemeToggle } from "./theme/ThemeToggle";
 
 export default function TodoList() {
   const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } =
@@ -20,16 +21,27 @@ export default function TodoList() {
     fetchTodos(currentPage, limit);
   }, [currentPage, limit, fetchTodos]);
 
-  const handleCreate = async (data: { title: string; description: string }) => {
-    try {
-      await createTodo(data);
-      setIsCreateOpen(false);
-      toast.success("با موفقیت ایجاد شد");
-    } catch (e) {
-      const message = e instanceof Error ? e.message : "خطا در ایجاد تسک";
-      toast.error(message);
-    }
-  };
+  const handleCreate = useCallback(
+    async (data: { title: string; description: string }) => {
+      try {
+        await createTodo(data);
+        setIsCreateOpen(false);
+        toast.success("با موفقیت ایجاد شد");
+      } catch (e) {
+        const message = e instanceof Error ? e.message : "خطا در ایجاد تسک";
+        toast.error(message);
+      }
+    },
+    [createTodo]
+  );
+
+  const handleCreateOpen = useCallback(() => {
+    setIsCreateOpen(true);
+  }, []);
+
+  const handleCreateClose = useCallback(() => {
+    setIsCreateOpen(false);
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -56,50 +68,61 @@ export default function TodoList() {
       )
     : todos;
 
+  const handleCreateKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleCreateOpen();
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} role="main" aria-label="Task Manager">
       {!isCreateOpen ? (
         <div className={styles.actionsRowStart}>
-               <ThemeToggle />
           <button
             className={`${styles.button} ${styles["button--createNew"]}`}
-            onClick={() => setIsCreateOpen(true)}
+            onClick={handleCreateOpen}
+            onKeyDown={handleCreateKeyDown}
+            aria-label="Create new task"
+            title="Create new task (Enter or Space)"
           >
-            <i className="fa-solid fa-plus"></i>
-            <span style={{ marginLeft: "5px" }}> Create New Task</span>
+            <i className="fa-solid fa-plus" aria-hidden="true"></i>
+            <span>Create New Task</span>
           </button>
         </div>
       ) : (
-        <div className={`${styles.card} ${styles["card--create"]}`}>
+        <div
+          className={`${styles.card} ${styles["card--create"]}`}
+          role="dialog"
+          aria-labelledby="create-task-title"
+        >
           <div className={styles["card__content"]}>
             <Form
               onSubmit={handleCreate}
-              onCancel={() => setIsCreateOpen(false)}
+              onCancel={handleCreateClose}
               submitLabel="Create"
             />
           </div>
         </div>
       )}
-      <input
-        className={styles.input}
-        placeholder="Search titles..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        aria-label="Search by title"
-      />
+      <SearchInput value={searchQuery} onChange={setSearchQuery} />
       {filteredTodos.length === 0 ? (
-        <div className={styles.emptyState}>
-          <p>
-            {searchQuery
-              ? "No tasks match."
-              : "No tasks found. Create a new task."}
-          </p>
-        </div>
+        <EmptyState
+          hasSearchQuery={!!searchQuery.trim()}
+          onClearSearch={handleClearSearch}
+        />
       ) : (
-        filteredTodos.map((todo) => <TaskCard key={todo.id} todo={todo} />)
+        <>
+          {filteredTodos.map((todo) => (
+            <TaskCard key={todo.id} todo={todo} />
+          ))}
+          {!searchQuery.trim() && <Pagination />}
+        </>
       )}
-
-      <Pagination />
     </div>
   );
 }

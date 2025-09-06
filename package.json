@@ -2,11 +2,16 @@
   "name": "task-manager",
   "version": "0.1.0",
   "private": true,
+  "description": "A  task management application built with Next.js, TypeScript, and Zustand",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.0.1",

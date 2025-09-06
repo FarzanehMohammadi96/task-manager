@@ -1,13 +1,26 @@
 "use client";
 
+import { memo, useCallback } from "react";
 import { useTodoStore } from "@/store/todoStore";
 import { getPagination } from '@/utils/getPagination';
 import styles from "../components/pagination/pagination.module.css";
 
-export const Pagination = () => {
+const PaginationComponent = () => {
   const { currentPage, setCurrentPage, limit, total, loading } = useTodoStore();
   const totalPages = Math.ceil(total / limit);
   const pages = getPagination(currentPage, limit, total);
+
+  const handlePrevPage = useCallback(() => {
+    setCurrentPage(currentPage - 1);
+  }, [setCurrentPage, currentPage]);
+
+  const handleNextPage = useCallback(() => {
+    setCurrentPage(currentPage + 1);
+  }, [setCurrentPage, currentPage]);
+
+  const handlePageClick = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, [setCurrentPage]);
 
   if (loading || total === 0) {
     return null;
@@ -16,10 +29,10 @@ export const Pagination = () => {
   return (
     <div className={styles.pagination}>
       <button
-        onClick={() => setCurrentPage(currentPage - 1)}
+        onClick={handlePrevPage}
         disabled={currentPage === 1 || loading}
       >
-        قبلی
+       Prev
       </button>
 
       {pages.map((page, index) => {
@@ -30,7 +43,7 @@ export const Pagination = () => {
             ) : (
               <button
                 className={page === currentPage ? styles.active : ""}
-                onClick={() => setCurrentPage(page as number)}
+                onClick={() => handlePageClick(page as number)}
                 disabled={loading}
               >
                 {page}
@@ -41,11 +54,13 @@ export const Pagination = () => {
       })}
 
       <button
-        onClick={() => setCurrentPage(currentPage + 1)}
+        onClick={handleNextPage}
         disabled={currentPage === totalPages || loading}
       >
-        بعدی
+        Next
       </button>
     </div>
   );
 };
+
+export const Pagination = memo(PaginationComponent);

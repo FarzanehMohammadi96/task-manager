@@ -3,11 +3,11 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type Theme = "light" | "dark";
 
-type ThemeContextValue = {
+interface ThemeContextValue {
   theme: Theme;
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
-};
+}
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 

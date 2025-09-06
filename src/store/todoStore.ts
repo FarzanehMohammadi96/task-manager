@@ -1,49 +1,35 @@
 import { create } from "zustand";
-import { Todo, TodoStore } from "../types/todo";
+import { Todo, TodoStore } from "../types/todoTypes";
+import { createTodo, deleteTodo, fetchTodos, updateTodo } from "@/services/todoApi";
 
 export const useTodoStore = create<TodoStore>((set, get) => ({
+  // Initial state
   todos: [],
   currentPage: 1,
   limit: 10,
   total: 0,
   loading: false,
   error: null,
+  
   setCurrentPage: (currentPage: number) => set({ currentPage }),
+  setLoading: (loading: boolean) => set({ loading }),
+  setError: (error: string | null) => set({ error }),
+  setTodos: (todos: Todo[]) => set({ todos }),
+  setTotal: (total: number) => set({ total }),
 
   fetchTodos: async (currentPage = 1, limit = 10) => {
     set({ loading: true, error: null });
 
     try {
-      const res = await fetch(
-        `https://68baa63184055bce63efb8ee.mockapi.io/tasks?page=${currentPage}&limit=${limit}`
-      );
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const data: Todo[] = await res.json();
-
-      const paginationTotal = await fetch(
-        `https://68baa63184055bce63efb8ee.mockapi.io/tasks`
-      );
-
-      if (!paginationTotal.ok) {
-        throw new Error(`HTTP error! status: ${paginationTotal.status}`);
-      }
-
-      const allData: Todo[] = await paginationTotal.json();
-      const totalCount = allData.length;
-
+      const response = await fetchTodos(currentPage, limit);
       set({
-        todos: data,
-        currentPage,
-        total: totalCount,
+        todos: response.todos,
+        currentPage: response.currentPage,
+        total: response.total,
         loading: false,
         error: null,
       });
     } catch (error) {
-      console.error("Error fetching todos:", error);
       set({
         loading: false,
         error:
@@ -58,40 +44,42 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const res = await fetch(
-        `https://68baa63184055bce63efb8ee.mockapi.io/tasks`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            title: payload.title,
-            description: payload.description,
-            image: "",
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`error status: ${res.status}`);
-      }
-
-      const created: Todo = await res.json();
-
-      const { todos, total } = get();
-      set({
-        todos: [created, ...todos],
-        total: total + 1,
-        loading: false,
-        error: null,
-      });
+      await createTodo(payload);
+      set({ currentPage: 1 });
+      await get().fetchTodos(1, get().limit);
     } catch (error) {
-      console.error('Error creating:', error);
       set({
         loading: false,
         error:
-          error instanceof Error ? error.message : 'Failed to create new task. Please try again.',
+          error instanceof Error
+            ? error.message
+            : "Failed to create new task. Please try again.",
+      });
+    }
+  },
+
+  updateTodo: async (
+    id: string,
+    updates: { title: string; description: string }
+  ) => {
+    set({ loading: true, error: null });
+
+    try {
+      const updated = await updateTodo(id, updates);
+      const { todos } = get();
+
+      const nextTodos = todos.map((todoItem) =>
+        todoItem.id === id ? { ...todoItem, ...updated } : todoItem
+      );
+
+      set({ todos: nextTodos, loading: false, error: null });
+    } catch (error) {
+      set({
+        loading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update task. Please try again.",
       });
     }
   },
@@ -100,17 +88,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const res = await fetch(
-        `https://68baa63184055bce63efb8ee.mockapi.io/tasks/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`error status: ${res.status}`);
-      }
-
+      await deleteTodo(id);
       const { todos, currentPage, limit, total } = get();
       const updatedTodos = todos.filter((todo) => todo.id !== id);
 
@@ -127,58 +105,12 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
         get().fetchTodos(newPage, limit);
       }
     } catch (error) {
-      console.error("Error deleting:", error);
       set({
         loading: false,
         error:
           error instanceof Error
             ? error.message
             : "Failed to delete task. Please try again.",
-      });
-    }
-  },
-
-  updateTodo: async (
-    id: string,
-    updates: { title: string; description: string }
-  ) => {
-    set({ loading: true, error: null });
-
-    try {
-      const res = await fetch(
-        `https://68baa63184055bce63efb8ee.mockapi.io/tasks/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: updates.title,
-            description: updates.description,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`error status: ${res.status}`);
-      }
-
-      const updated = await res.json();
-
-      const { todos } = get();
-      const nextTodos = todos.map((todoItem) =>
-        todoItem.id === id ? { ...todoItem, ...updated } : todoItem
-      );
-
-      set({ todos: nextTodos, loading: false, error: null });
-    } catch (error) {
-      console.error("Error updating:", error);
-      set({
-        loading: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to update. Please try again.",
       });
     }
   },

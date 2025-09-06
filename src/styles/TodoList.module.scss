@@ -1,25 +1,11 @@
-// color variables
-$blue: #3b82f6;
-$dark-blue: #2b60b6;
-$light-blue: #eaf2fe;
-
-$red: #ff4d4f;
-$light-red: #fcf1f1;
-
-$green: #0db50d;
-$dark-green: #0e8c0e;
-
-$dark-mode-text-color : "#e6e6e6";
-$dark-mode-dark-gray: "#0c0e12";
-$light-gray: "#2a2a2a";
-$dark-mode-lighter-gray : "#c8c8c8";
+@use 'colors' as *;
 
 .container {
     display: flex;
     flex-direction: column;
     gap: 16px;
     padding: 16px;
-    width: 60vw;
+    width: 80vw;
     margin: 16px auto;
 }
 
@@ -31,7 +17,6 @@ $dark-mode-lighter-gray : "#c8c8c8";
     justify-content: space-between;
     align-items: flex-start;
     padding: 16px;
-    gap: 16px;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -85,6 +70,7 @@ $dark-mode-lighter-gray : "#c8c8c8";
 .emptyState {
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
     padding: 3rem;
     text-align: center;
@@ -92,6 +78,7 @@ $dark-mode-lighter-gray : "#c8c8c8";
     background: #f9f9f9;
     border-radius: 12px;
     border: 2px dashed #ddd;
+    gap: 1rem;
 }
 
 .actionsRow {
@@ -186,6 +173,14 @@ $dark-mode-lighter-gray : "#c8c8c8";
         &:hover {
             background: $dark-blue;
         }
+    }
+
+    
+        &--clearSearch {
+        border: 1px dashed gray;
+        color: $dark-mode-dark-gray;
+
+     
     }
 }
 

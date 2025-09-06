@@ -1,7 +1,11 @@
-export const getPagination = (currentPage, limit, total) => {
+export const getPagination = (
+  currentPage: number,
+  limit: number,
+  total: number
+): (number | string)[] => {
   const totalPages = Math.ceil(total / limit);
 
-  const pages = [];
+  const pages: (number | string)[] = [];
   const delta = 1;
 
   const left = Math.max(2, currentPage - delta);
