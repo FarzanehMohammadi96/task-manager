@@ -5,6 +5,7 @@ import { ToastProvider } from "@/components/ToastProvider";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Header from "@/components/header/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
+          <Header />
           {children}
           <ToastProvider />
         </ThemeProvider>

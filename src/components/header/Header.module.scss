@@ -1,0 +1,28 @@
+@use '../../styles/colors' as *;
+
+
+.headerContainer {
+    background-color: $light-blue;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80vw;
+    margin: 0 auto;
+    padding: 20px;
+
+}
+
+.logoTitle {
+    display: flex;
+    align-items: center;
+    gap: 5;
+}
+
+:global(.dark) {
+    .logoTitle {
+        color: $dark-mode-dark-gray;
+    }
+}
