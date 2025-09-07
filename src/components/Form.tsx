@@ -1,11 +1,13 @@
 "use client";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
+import { TodoStatus } from "@/types/todoTypes";
 import styles from "../styles/TodoList.module.scss";
 
 interface FormValues {
   title: string;
   description: string;
+  status?: TodoStatus;
 }
 
 interface TaskFormProps {
@@ -75,6 +77,42 @@ export const Form: FC<TaskFormProps> = ({
       {errors.description && (
         <p className={styles.error}>{errors.description.message}</p>
       )}
+
+      <div className={styles.statusGroup}>
+        <div className={styles.statusLabel}>Status (Optional):</div>
+        <div className={styles.radioGroup}>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              id="status-todo"
+              value="todo"
+              {...register("status")}
+              disabled={submitting}
+            />
+            <label htmlFor="status-todo">Todo</label>
+          </div>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              id="status-doing"
+              value="doing"
+              {...register("status")}
+              disabled={submitting}
+            />
+            <label htmlFor="status-doing">Doing</label>
+          </div>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              id="status-done"
+              value="done"
+              {...register("status")}
+              disabled={submitting}
+            />
+            <label htmlFor="status-done">Done</label>
+          </div>
+        </div>
+      </div>
 
       <div className={styles.actionsRow}>
         <button

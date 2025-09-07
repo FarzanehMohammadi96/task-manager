@@ -81,15 +81,144 @@
     gap: 1rem;
 }
 
+.status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &--todo {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+    }
+
+    &--doing {
+        background-color: #fff3e0;
+        color: #f57c00;
+        border: 1px solid #ffcc02;
+    }
+
+    &--done {
+        background-color: #e8f5e8;
+        color: #388e3c;
+        border: 1px solid #c8e6c9;
+    }
+}
+
+.statusGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.statusLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: $light-gray;
+    margin-bottom: 4px;
+}
+
+.radioGroup {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.radioOption {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+
+    input[type="radio"] {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    label {
+        cursor: pointer;
+        font-size: 14px;
+        color: $light-gray;
+    }
+}
+
 .actionsRow {
     display: flex;
     justify-content: center;
     gap: 8px;
+    align-items: center;
 }
 
-.actionsRowStart {
-    display: flex;
+.cardsActions{
+      display: flex;
     justify-content: space-between;
+    gap: 8px;
+    align-items: center;  
+}
+
+.filterActionsRow {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+
+// .actionsRowStart {
+//     display: flex;
+//     justify-content: space-between;
+// }
+
+
+
+
+.filterSelect {
+    padding: 10px;
+    border: 1px solid  rgb(213, 213, 213);
+    border-radius: 8px;
+    background: #fff;
+    color: $light-gray;
+    font-size: 14px;
+    // font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    // appearance: none;
+    // background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    // background-repeat: no-repeat;
+    // background-position: right 12px center;
+    // background-size: 16px;
+    // padding-right: 40px;
+
+    &:hover {
+        border-color: $blue;
+        color: $blue;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $blue;
+        box-shadow: 0 0 0 3px rgba($blue, 0.2);
+    }
+
+    option {
+        padding: 8px;
+        background: #fff;
+        color: $light-gray;
+
+        &:disabled {
+            color: #999;
+            font-style: italic;
+        }
+    }
 }
 
 .dataWrapper {
@@ -149,6 +278,7 @@
         border: none;
         background: $blue;
         color: #fff;
+        padding: 10px 20px;
 
         &:hover {
             background: $dark-blue;
@@ -208,6 +338,10 @@
         background: $dark-mode-dark-gray;
         color: $dark-mode-text-color;
 
+        &::placeholder {
+            color: $dark-mode-lighter-gray;
+        }
+
         &:focus {
             color: $dark-mode-text-color;
             border-color: $blue;
@@ -219,6 +353,73 @@
         color: $dark-mode-lighter-gray;
         background: $dark-mode-dark-gray;
         border-color: $light-gray;
+    }
+
+    .status {
+        &--todo {
+            background-color: rgba(33, 150, 243, 0.1);
+            color: #64b5f6;
+            border-color: rgba(100, 181, 246, 0.3);
+        }
+
+        &--doing {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #ffb74d;
+            border-color: rgba(255, 183, 77, 0.3);
+        }
+
+        &--done {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #81c784;
+            border-color: rgba(129, 199, 132, 0.3);
+        }
+    }
+
+    .statusLabel {
+        color: $dark-mode-text-color;
+    }
+
+    .radioOption {
+        label {
+            color: $dark-mode-text-color;
+        }
+    }
+
+    .filterActionsRow {
+        background: $dark-mode-dark-gray;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid $light-gray;
+    }
+
+    .filterLabel {
+        color: $dark-mode-text-color;
+    }
+
+    .filterSelect {
+        background: $dark-mode-dark-gray;
+        color: $dark-mode-text-color;
+        border-color: $light-gray;
+
+        &:hover {
+            border-color: $light-blue;
+            color: $light-blue;
+        }
+
+        &:focus {
+            border-color: $light-blue;
+            box-shadow: 0 0 0 3px rgba($light-blue, 0.25);
+        }
+
+        option {
+            background: $dark-mode-dark-gray;
+            color: $dark-mode-text-color;
+
+            &:disabled {
+                color: $dark-mode-lighter-gray;
+                font-style: italic;
+            }
+        }
     }
 
     .button {
@@ -283,6 +484,16 @@
 
     .actionsRow {
         gap: 8px;
+    }
+
+    .filterButtons {
+        gap: 6px;
+    }
+
+    .filterButton {
+        padding: 10px 12px;
+        font-size: 13px;
+        min-width: 50px;
     }
 
     .button {

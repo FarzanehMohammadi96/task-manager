@@ -18,11 +18,18 @@
 .logoTitle {
     display: flex;
     align-items: center;
-    gap: 5;
+    gap: 5px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
 }
 
 :global(.dark) {
+    .headerContainer {
+        background-color: $dark-mode-dark-gray;
+    }
+    
     .logoTitle {
-        color: $dark-mode-dark-gray;
+        color: $dark-mode-text-color;
     }
 }

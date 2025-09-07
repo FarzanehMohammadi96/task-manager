@@ -1,4 +1,4 @@
-import { Todo } from "../types/todoTypes";
+import { Todo, TodoStatus } from "../types/todoTypes";
 
 const BASE_URL = "https://68baa63184055bce63efb8ee.mockapi.io/tasks";
 
@@ -12,11 +12,13 @@ interface PaginatedResponse {
 interface CreateTodoRequest {
   title: string;
   description: string;
+  status?: TodoStatus;
 }
 
 interface UpdateTodoRequest {
   title: string;
   description: string;
+  status?: TodoStatus;
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {
@@ -59,6 +61,7 @@ export async function createTodo(
       title: payload.title,
       description: payload.description,
       image: "",
+      status: payload.status || null,
     }),
   });
 

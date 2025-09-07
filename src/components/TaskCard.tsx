@@ -2,8 +2,9 @@
 import { FC, useState, memo, useCallback } from "react";
 import styles from "../styles/TodoList.module.scss";
 import { useTodoStore } from "../store/todoStore";
-import { Todo } from "@/types/todoTypes";
+import { Todo, TodoStatus } from "@/types/todoTypes";
 import { Form } from "./Form";
+import { StatusDisplay } from "./StatusDisplay";
 import { toast } from "react-toastify";
 import Image from "next/image";
 
@@ -16,7 +17,7 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
   const [editing, setEditing] = useState(false);
 
   const handleUpdate = useCallback(
-    async (data: { title: string; description: string }) => {
+    async (data: { title: string; description: string; status?: TodoStatus }) => {
       try {
         await updateTodo(todo.id, data);
         setEditing(false);
@@ -72,7 +73,7 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
 
   return (
     <div
-      className={styles.card}
+      className={`${styles.card} ${editing ? styles['card--editing'] : ''}`}
       aria-labelledby={`task-title-${todo.id}`}
       aria-describedby={`task-description-${todo.id}`}
       tabIndex={editing ? -1 : 0}
@@ -82,7 +83,11 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
       <div className={styles["card__content"]}>
         {editing ? (
           <Form
-            initialValues={{ title: todo.title, description: todo.description }}
+            initialValues={{ 
+              title: todo.title, 
+              description: todo.description,
+              status: todo.status
+            }}
             onSubmit={handleUpdate}
             onCancel={handleCancel}
             submitting={loading}
@@ -118,6 +123,9 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
               <p className={styles.bold}>
                 Description: <span>{todo.description}</span>
               </p>
+              <div style={{ marginTop: '8px' }}>
+                <StatusDisplay status={todo.status} />
+              </div>
             </div>
           </div>
         )}

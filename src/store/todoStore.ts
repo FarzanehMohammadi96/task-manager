@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Todo, TodoStore } from "../types/todoTypes";
+import { Todo, TodoStore, TodoStatus } from "../types/todoTypes";
 import { createTodo, deleteTodo, fetchTodos, updateTodo } from "@/services/todoApi";
 
 export const useTodoStore = create<TodoStore>((set, get) => ({
@@ -40,7 +40,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
     }
   },
 
-  createTodo: async (payload: { title: string; description: string }) => {
+  createTodo: async (payload: { title: string; description: string; status?: TodoStatus }) => {
     set({ loading: true, error: null });
 
     try {
@@ -60,7 +60,7 @@ export const useTodoStore = create<TodoStore>((set, get) => ({
 
   updateTodo: async (
     id: string,
-    updates: { title: string; description: string }
+    updates: { title: string; description: string; status?: TodoStatus }
   ) => {
     set({ loading: true, error: null });
 

@@ -1,8 +1,11 @@
+export type TodoStatus = 'todo' | 'doing' | 'done';
+
 export interface Todo {
   id: string;
   title: string;
   description: string;
   image: string;
+  status?: TodoStatus;
 }
 
 export interface TodoStore {
@@ -19,6 +22,6 @@ export interface TodoStore {
   setTotal: (total: number) => void;
   fetchTodos: (currentPage?: number, limit?: number) => Promise<void>;
   deleteTodo: (id: string) => Promise<void>;
-  updateTodo: (id: string, updates: { title: string; description: string }) => Promise<void>;
-  createTodo: (payload: { title: string; description: string }) => Promise<void>;
+  updateTodo: (id: string, updates: { title: string; description: string; status?: TodoStatus }) => Promise<void>;
+  createTodo: (payload: { title: string; description: string; status?: TodoStatus }) => Promise<void>;
 }
