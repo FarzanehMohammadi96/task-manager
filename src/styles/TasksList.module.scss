@@ -71,7 +71,7 @@
     color: $light-gray;
 
 
-    &--form {
+    &--box {
         margin-bottom: 20px;
     }
 
@@ -95,6 +95,10 @@
             box-shadow: 0 0 0 3px rgba($blue, 0.25);
         }
     }
+}
+
+.error {
+    color: $red;
 }
 
 .emptyState {
@@ -214,6 +218,10 @@
     cursor: pointer;
     transition: all 0.2s ease;
 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
     &:hover {
         border-color: $blue;
         color: $blue;
@@ -237,9 +245,8 @@
     }
 
     @include dark-mode {
-        background: $dark-gray;
+        background-color: $dark-gray;
         color: $lighter-gray;
-        border-color: $light-gray;
 
         &:hover {
             border-color: $light-blue;
@@ -286,21 +293,34 @@
     &--edit {
         @include button($blue);
 
+
+
+        &:hover {
+            background-color: $light-blue;
+        }
+
         @include dark-mode {
-            color: $light-blue;
-            border-color: $light-blue;
+
+
+            &:hover {
+                background-color: $darker-blue;
+            }
         }
     }
 
     &--delete {
         @include button($red);
 
+        &:hover {
+            background-color: $light-red;
+        }
+
         @include dark-mode {
             color: $red;
             border-color: $red;
 
             &:hover {
-                background-color: rgb(70, 20, 20);
+                background-color: $dark-red;
             }
         }
     }

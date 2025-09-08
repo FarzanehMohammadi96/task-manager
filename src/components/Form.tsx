@@ -61,7 +61,12 @@ export const Form: FC<TaskFormProps> = ({
           disabled={submitting}
         />
       </label>
-      {errors.title && <p className={styles.error}>{errors.title.message}</p>}
+
+      {errors.title && (
+        <p className={`${styles.error} ${styles["input--box"]}`}>
+          {errors.title.message}
+        </p>
+      )}
 
       <label className={styles.bold}>
         Description:
@@ -76,7 +81,9 @@ export const Form: FC<TaskFormProps> = ({
         />
       </label>
       {errors.description && (
-        <p className={styles.error}>{errors.description.message}</p>
+        <p className={`${styles.error} ${styles["input--box"]}`}>
+          {errors.description.message}
+        </p>
       )}
 
       <label className={styles.bold}>Status (Optional):</label>
