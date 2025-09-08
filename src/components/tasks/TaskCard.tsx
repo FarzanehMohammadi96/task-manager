@@ -1,34 +1,63 @@
 "use client";
 import { FC, useState, memo, useCallback } from "react";
-import styles from "../styles/TodoList.module.scss";
-import { useTodoStore } from "../store/todoStore";
+import styles from "@/styles/TasksList.module.scss";
+
 import { Todo, TodoStatus } from "@/types/todoTypes";
-import { Form } from "./Form";
-import { StatusDisplay } from "./StatusDisplay";
+
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { useTodoStore } from "@/store/todoStore";
+import { Form } from "../Form";
+import { StatusDisplay } from "../StatusDisplay";
 
 interface TaskCardProps {
   todo: Todo;
+  searchQuery?: string;
 }
+const highlightText = (text: string, query?: string) => {
+  if (!query) return text;
+  const regex = new RegExp(`(${query})`, "gi");
+  const parts = text.split(regex);
+  return parts.map((part, i) =>
+    regex.test(part) ? (
+      <mark key={i} style={{ backgroundColor: "#f9e147ff" }}>
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
+};
 
-export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
+export const TaskCard: FC<TaskCardProps> = ({ todo, searchQuery }) => {
   const { updateTodo, deleteTodo, loading } = useTodoStore();
   const [editing, setEditing] = useState(false);
 
   const handleUpdate = useCallback(
-    async (data: { title: string; description: string; status?: TodoStatus }) => {
+    async (data: {
+      title: string;
+      description: string;
+      status?: TodoStatus | null;
+    }) => {
       try {
         await updateTodo(todo.id, data);
         setEditing(false);
-        toast.success("با موفقیت ویرایش شد");
+        toast.success("Edited Successfully!");
       } catch (e) {
-        const message = e instanceof Error ? e.message : "خطا در ویرایش تسک";
+        const message = e instanceof Error ? e.message : "Error editing task!";
         toast.error(message);
       }
     },
     [updateTodo, todo.id]
   );
+
+  const handleClearStatus = useCallback(async () => {
+    await updateTodo(todo.id, {
+      title: todo.title,
+      description: todo.description,
+      status: null,
+    });
+  }, [updateTodo, todo.id, todo.title, todo.description]);
 
   const handleEdit = useCallback(() => {
     setEditing(true);
@@ -41,9 +70,9 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
   const handleDeleteClick = useCallback(async () => {
     try {
       await deleteTodo(todo.id);
-      toast.success("تسک با موفقیت حذف شد");
+      toast.success("Deleted Successfully!");
     } catch (e) {
-      const message = e instanceof Error ? e.message : "خطا در حذف تسک";
+      const message = e instanceof Error ? e.message : "Error Delete task ";
       toast.error(message);
     }
   }, [deleteTodo, todo.id]);
@@ -73,7 +102,7 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
 
   return (
     <div
-      className={`${styles.card} ${editing ? styles['card--editing'] : ''}`}
+      className={`${styles.card} ${editing ? styles["card--editing"] : ""}`}
       aria-labelledby={`task-title-${todo.id}`}
       aria-describedby={`task-description-${todo.id}`}
       tabIndex={editing ? -1 : 0}
@@ -83,10 +112,10 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
       <div className={styles["card__content"]}>
         {editing ? (
           <Form
-            initialValues={{ 
-              title: todo.title, 
+            initialValues={{
+              title: todo.title,
               description: todo.description,
-              status: todo.status
+              status: todo.status,
             }}
             onSubmit={handleUpdate}
             onCancel={handleCancel}
@@ -118,13 +147,16 @@ export const TaskCard: FC<TaskCardProps> = ({ todo }) => {
 
             <div>
               <p className={styles.bold}>
-                Title: <span>{todo.title}</span>
+                Title: <span>{highlightText(todo.title, searchQuery)}</span>
               </p>
               <p className={styles.bold}>
                 Description: <span>{todo.description}</span>
               </p>
-              <div style={{ marginTop: '8px' }}>
-                <StatusDisplay status={todo.status} />
+              <div style={{ marginTop: "8px" }}>
+                <StatusDisplay
+                  status={todo.status}
+                  onClear={handleClearStatus}
+                />
               </div>
             </div>
           </div>

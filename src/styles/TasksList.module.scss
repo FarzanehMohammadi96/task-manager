@@ -1,0 +1,428 @@
+@use 'colors' as *;
+@use 'mixins' as *;
+
+.container {
+    @include flex(column, flex-start, stretch, 16px);
+    padding: 16px;
+    width: 80vw;
+    margin: 16px auto;
+}
+
+.card {
+    @include card();
+    @include flex(row, space-between, flex-start);
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    &__content {
+        flex: 1;
+    }
+
+    &--create {
+        @include card(rgb(245, 245, 248), 12px, 0 6px 15px rgba(62, 62, 76, 0.15));
+        border: 2px dashed rgb(173, 173, 173);
+        cursor: default;
+        margin-bottom: 20px;
+
+        &:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        @include dark-mode {
+            background-color: $lighter-gray;
+            border: 2px dashed rgb(231, 231, 253);
+        }
+    }
+
+    @include dark-mode {
+        background: #111318;
+        box-shadow: 0 4px 10px rgba(42, 42, 42, 0.4);
+    }
+}
+
+.bold {
+    font-weight: bold;
+
+    span {
+        font-weight: normal;
+        color: $light-gray;
+
+        @include dark-mode {
+            color: $light-gray;
+        }
+    }
+
+    @include dark-mode {
+        color: $lighter-gray;
+    }
+}
+
+.input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+    margin: 8px 0;
+    color: $light-gray;
+
+
+    &--form {
+        margin-bottom: 20px;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $blue;
+        box-shadow: 0 0 0 3px rgba($blue, 0.2);
+    }
+
+    @include dark-mode {
+        border-color: $light-gray;
+        background: $dark-gray;
+        color: $lighter-gray;
+
+        &::placeholder {
+            color: $light-gray;
+        }
+
+        &:focus {
+            border-color: $blue;
+            box-shadow: 0 0 0 3px rgba($blue, 0.25);
+        }
+    }
+}
+
+.emptyState {
+    @include flex(column, center, center, 1rem);
+    padding: 3rem;
+    text-align: center;
+    color: #666;
+    background: #f9f9f9;
+    border-radius: 12px;
+    border: 2px dashed #ddd;
+
+    @include dark-mode {
+        color: $light-gray;
+        background: $dark-gray;
+        border-color: $light-gray;
+    }
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-right: 22px;
+    margin-bottom: 10px;
+
+    &__close {
+        position: absolute;
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        color: inherit;
+        line-height: 16px;
+        text-align: center;
+        cursor: pointer;
+        padding: 0;
+        font-size: 14px;
+        transition: opacity 0.15s ease;
+    }
+
+    &--todo {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+
+        @include dark-mode {
+            background-color: rgba(33, 150, 243, 0.1);
+            color: #64b5f6;
+            border-color: rgba(100, 181, 246, 0.3);
+        }
+    }
+
+    &--doing {
+        background-color: #fff3e0;
+        color: #f57c00;
+        border: 1px solid #ffcc02;
+
+        @include dark-mode {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #ffb74d;
+            border-color: rgba(255, 183, 77, 0.3);
+        }
+    }
+
+    &--done {
+        background-color: #e8f5e8;
+        color: #388e3c;
+        border: 1px solid #c8e6c9;
+
+        @include dark-mode {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #81c784;
+            border-color: rgba(129, 199, 132, 0.3);
+        }
+    }
+}
+
+.statusGroup {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+
+.actionsRow,
+.cardsActions {
+    @include flex(row, center, center, 8px);
+}
+
+.cardsActions {
+    justify-content: space-between;
+}
+
+.filterActionsRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filterSelect {
+    padding: 10px;
+    border: 1px solid $light-gray;
+    border-radius: 8px;
+    background: #fff;
+    color: $light-gray;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: $blue;
+        color: $blue;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $blue;
+        box-shadow: 0 0 0 3px rgba($blue, 0.2);
+    }
+
+    option {
+        padding: 8px;
+        background: #fff;
+        color: $light-gray;
+
+        &:disabled {
+            color: #999;
+            font-style: italic;
+        }
+    }
+
+    @include dark-mode {
+        background: $dark-gray;
+        color: $lighter-gray;
+        border-color: $light-gray;
+
+        &:hover {
+            border-color: $light-blue;
+            color: $light-blue;
+        }
+
+        &:focus {
+            border-color: $light-blue;
+            box-shadow: 0 0 0 3px rgba($light-blue, 0.25);
+        }
+
+        option {
+            background: $dark-gray;
+            color: $lighter-gray;
+
+            &:disabled {
+                color: $light-gray;
+            }
+        }
+    }
+}
+
+.dataWrapper {
+    @include flex(row, flex-start, center, 10px);
+}
+
+.imageWrapper {
+    width: 100px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    @include flex(row, center, center);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.button {
+    &--edit {
+        @include button($blue);
+
+        @include dark-mode {
+            color: $light-blue;
+            border-color: $light-blue;
+        }
+    }
+
+    &--delete {
+        @include button($red);
+
+        @include dark-mode {
+            color: $red;
+            border-color: $red;
+
+            &:hover {
+                background-color: rgb(70, 20, 20);
+            }
+        }
+    }
+
+    &--createNew {
+        @include button(#fff, $blue, none);
+        padding: 10px 20px;
+
+        &:hover {
+            background: $dark-blue;
+        }
+    }
+
+    &--save {
+        @include button(#fff, $green, none);
+
+        &:hover {
+            background: $dark-green;
+        }
+    }
+
+    &--editPrimary {
+        @include button(#fff, $blue, none);
+
+        &:hover {
+            background: $dark-blue;
+        }
+    }
+
+    &--clearSearch {
+        border: 1px dashed gray;
+        color: $dark-gray;
+    }
+}
+
+// ================== Responsive ==================
+@media (max-width: 1024px) {
+    .container {
+        width: 90vw;
+        padding: 12px;
+    }
+
+    .dataWrapper {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100vw;
+        padding: 12px;
+        margin: 0 auto;
+    }
+
+    .cardsActions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .filterActionsRow {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .filterSection {
+        width: 100%;
+    }
+
+    .filterSelect {
+        width: 100%;
+    }
+
+    .card {
+        flex-direction: column;
+        align-items: stretch;
+
+        &__content {
+            width: 100%;
+        }
+    }
+
+    .dataWrapper {
+        flex-direction: column;
+    }
+
+    .imageWrapper {
+        width: 80vw;
+        height: 100px;
+        margin: 0 auto;
+    }
+
+    .button {
+        width: 100%;
+        padding: 14px;
+        font-size: 15px;
+
+        &--createNew {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .dataWrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .bold {
+        font-size: 14px;
+    }
+
+    .input {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

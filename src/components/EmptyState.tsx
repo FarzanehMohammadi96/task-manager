@@ -1,5 +1,6 @@
 import { FC, memo } from "react";
-import styles from "../styles/TodoList.module.scss";
+import styles from "../styles/TasksList.module.scss";
+import { useRouter } from "next/navigation";
 
 interface EmptyStateProps {
   hasSearchQuery: boolean;
@@ -20,11 +21,14 @@ const EmptyStateComponent: FC<EmptyStateProps> = ({
   onClearSearch,
   onClearFilter,
 }) => {
+
+    const router = useRouter();
+
   const handleClearSearch = () => {
     if (onClearSearch) {
       onClearSearch();
     } else {
-      window.location.reload();
+      router.refresh()
     }
   };
 
@@ -32,8 +36,7 @@ const EmptyStateComponent: FC<EmptyStateProps> = ({
     if (onClearFilter) {
       onClearFilter();
     } else {
-      window.location.reload();
-    }
+ router.refresh()    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

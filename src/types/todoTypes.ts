@@ -5,7 +5,7 @@ export interface Todo {
   title: string;
   description: string;
   image: string;
-  status?: TodoStatus;
+  status?: TodoStatus | null;
 }
 
 export interface TodoStore {
@@ -22,6 +22,6 @@ export interface TodoStore {
   setTotal: (total: number) => void;
   fetchTodos: (currentPage?: number, limit?: number) => Promise<void>;
   deleteTodo: (id: string) => Promise<void>;
-  updateTodo: (id: string, updates: { title: string; description: string; status?: TodoStatus }) => Promise<void>;
-  createTodo: (payload: { title: string; description: string; status?: TodoStatus }) => Promise<void>;
+  updateTodo: (id: string, updates: { title: string; description: string; status?: TodoStatus | null }) => Promise<void>;
+  createTodo: (payload: { title: string; description: string; status?: TodoStatus | null }) => Promise<void>;
 }

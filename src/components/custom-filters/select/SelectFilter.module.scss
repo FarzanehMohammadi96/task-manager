@@ -1,0 +1,68 @@
+@use '@/styles/colors' as *;
+
+.filterSelect {
+    padding: 10px;
+    border: 1px solid rgb(213, 213, 213);
+    border-radius: 8px;
+    background: #fff;
+    color: $gray;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: $blue;
+        color: $blue;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $blue;
+        box-shadow: 0 0 0 3px rgba($blue, 0.2);
+    }
+
+    option {
+        padding: 8px;
+        background: #fff;
+        color: $gray;
+
+        &:disabled {
+            color: #999;
+            font-style: italic;
+        }
+    }
+}
+
+:global(.dark) {
+    .filterSelect {
+        background: $dark-gray;
+        color: $lighter-gray;
+        border-color: $gray;
+
+        &:hover {
+            border-color: $light-blue;
+            color: $light-blue;
+        }
+
+        &:focus {
+            border-color: $light-blue;
+            box-shadow: 0 0 0 3px rgba($light-blue, 0.25);
+        }
+
+        option {
+            background: $dark-gray;
+            color: $lighter-gray;
+
+            &:disabled {
+                color: $light-gray;
+                font-style: italic;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .filterSelect {
+        width: 90vw;
+    }
+}

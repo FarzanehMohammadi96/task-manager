@@ -2,7 +2,8 @@
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { TodoStatus } from "@/types/todoTypes";
-import styles from "../styles/TodoList.module.scss";
+import styles from "../styles/TasksList.module.scss";
+import { RadioButton } from "./custom-filters/radio/RadioButton";
 
 interface FormValues {
   title: string;
@@ -50,7 +51,7 @@ export const Form: FC<TaskFormProps> = ({
       <label className={styles.bold}>
         Title:
         <input
-          className={styles.input}
+          className={`${styles.input} ${styles["input--form"]}`}
           {...register("title", {
             required: "Title is required",
             minLength: { value: 3, message: "At least 3 chars" },
@@ -65,7 +66,7 @@ export const Form: FC<TaskFormProps> = ({
       <label className={styles.bold}>
         Description:
         <input
-          className={styles.input}
+          className={`${styles.input} ${styles["input--form"]}`}
           {...register("description", { required: "Description is required" })}
           disabled={submitting}
           aria-describedby={
@@ -78,40 +79,16 @@ export const Form: FC<TaskFormProps> = ({
         <p className={styles.error}>{errors.description.message}</p>
       )}
 
+      <label className={styles.bold}>Status (Optional):</label>
       <div className={styles.statusGroup}>
-        <div className={styles.statusLabel}>Status (Optional):</div>
-        <div className={styles.radioGroup}>
-          <div className={styles.radioOption}>
-            <input
-              type="radio"
-              id="status-todo"
-              value="todo"
-              {...register("status")}
-              disabled={submitting}
-            />
-            <label htmlFor="status-todo">Todo</label>
-          </div>
-          <div className={styles.radioOption}>
-            <input
-              type="radio"
-              id="status-doing"
-              value="doing"
-              {...register("status")}
-              disabled={submitting}
-            />
-            <label htmlFor="status-doing">Doing</label>
-          </div>
-          <div className={styles.radioOption}>
-            <input
-              type="radio"
-              id="status-done"
-              value="done"
-              {...register("status")}
-              disabled={submitting}
-            />
-            <label htmlFor="status-done">Done</label>
-          </div>
-        </div>
+        <RadioButton
+          register={register}
+          options={[
+            { id: "status-todo", value: "todo", label: "Todo" },
+            { id: "status-doing", value: "doing", label: "Doing" },
+            { id: "status-done", value: "done", label: "Done" },
+          ]}
+        />
       </div>
 
       <div className={styles.actionsRow}>

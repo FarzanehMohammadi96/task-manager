@@ -1,23 +1,26 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import styles from "../styles/TodoList.module.scss";
-import { useTodoStore } from "../store/todoStore";
-import { TodoStatus } from "../types/todoTypes";
-import { Pagination } from "./Pagination";
-import { LoadingSpinner } from "./loading/LoadingSpinner";
-import { ErrorMessage } from "./error-handling/ErrorMessage";
+import styles from "@/styles/TasksList.module.scss";
+import { useTodoStore } from "../../store/todoStore";
+import { TodoStatus } from "../../types/todoTypes";
+import { Pagination } from "../pagination/Pagination";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
+import { ErrorMessage } from "../error-handling/ErrorMessage";
 import { TaskCard } from "./TaskCard";
-import { Form } from "./Form";
-import { SearchInput } from "./SearchInput";
-import { EmptyState } from "./EmptyState";
+import { Form } from "../Form";
+import { EmptyState } from "../EmptyState";
 import { toast } from "react-toastify";
+import { SearchInput } from "../custom-filters/search/SearchInput";
+import SelectFilter from "../custom-filters/select/SelectFilter";
 
-export default function TodoList() {
+export default function TasksList() {
   const { todos, fetchTodos, createTodo, currentPage, limit, loading, error } =
     useTodoStore();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<TodoStatus | "all"| "">("");
+  const [statusFilter, setStatusFilter] = useState<TodoStatus | "all" | "">(
+    "all"
+  );
 
   useEffect(() => {
     fetchTodos(currentPage, limit);
@@ -32,9 +35,9 @@ export default function TodoList() {
       try {
         await createTodo(data);
         setIsCreateOpen(false);
-        toast.success("با موفقیت ایجاد شد");
+        toast.success("Created Successfully!");
       } catch (e) {
-        const message = e instanceof Error ? e.message : "خطا در ایجاد تسک";
+        const message = e instanceof Error ? e.message : "Error Create Task";
         toast.error(message);
       }
     },
@@ -93,37 +96,36 @@ export default function TodoList() {
   };
 
   const handleClearFilter = () => {
-    setStatusFilter("");
+    setStatusFilter("all");
   };
+
+  const statusOptions = [
+    { value: "all", title: "All Tasks" },
+    { value: "todo", title: "Todo" },
+    { value: "doing", title: "Doing" },
+    { value: "done", title: "Done" },
+  ];
 
   return (
     <div className={styles.container} role="main" aria-label="Task Manager">
       <div className={styles.cardsActions}>
         <div className={styles.filterActionsRow}>
-          <section>
+          <section className={styles.filterSection}>
             <SearchInput value={searchQuery} onChange={setSearchQuery} />
           </section>
 
-          <section>
-               <select
-                 id="status-filter"
-                 className={styles.filterSelect}
-                 value={statusFilter}
-                 onChange={(e) =>
-                   setStatusFilter(e.target.value as TodoStatus | "all")
-                 }
-                 aria-label="Filter tasks by status"
-               >
-                 <option value="" disabled>Filter by Status</option>
-                 <option value="all">All Tasks</option>
-                 <option value="todo">Todo</option>
-                 <option value="doing">Doing</option>
-                 <option value="done">Done</option>
-               </select>
+          <section className={styles.filterSection}>
+            <SelectFilter
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              hasDisabledOption={true}
+              filterByName="Status"
+              options={statusOptions}
+            />
           </section>
         </div>
 
-        <section>
+        <section className={styles.filterSection}>
           <button
             className={`${styles.button} ${styles["button--createNew"]}`}
             onClick={handleCreateOpen}
@@ -136,7 +138,6 @@ export default function TodoList() {
         </section>
       </div>
 
-      {/* Create Form - Below filter/search row */}
       {isCreateOpen && (
         <div
           className={`${styles.card} ${styles["card--create"]}`}
@@ -163,7 +164,7 @@ export default function TodoList() {
       ) : (
         <>
           {filteredTodos.map((todo) => (
-            <TaskCard key={todo.id} todo={todo} />
+            <TaskCard key={todo.id} todo={todo} searchQuery={searchQuery} />
           ))}
           {!searchQuery.trim() && statusFilter === "all" && <Pagination />}
         </>

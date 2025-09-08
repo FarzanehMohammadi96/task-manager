@@ -1,0 +1,28 @@
+@use '@/styles/colors' as *;
+@use '@/styles/mixins' as *;
+
+
+.radioGroup {
+    @include flex(row, flex-start, center, 16px);
+    flex-wrap: wrap;
+}
+
+.radioOption {
+    @include flex(row, flex-start, center, 6px);
+    cursor: pointer;
+
+    input[type="radio"] {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    label {
+        cursor: pointer;
+        font-size: 14px;
+        color: $gray;
+
+        @include dark-mode {
+            color: $lighter-gray;
+        }
+    }
+}

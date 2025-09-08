@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import Image from "next/image";
 import { ThemeToggle } from "../theme/ThemeToggle";
 import styles from "./Header.module.scss";

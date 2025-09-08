@@ -1,4 +1,4 @@
-@use '../../styles/colors' as *;
+@use '@/styles/colors' as *;
 
 
 .headerContainer {
@@ -22,14 +22,12 @@
     color: #fff;
     font-weight: 600;
     font-size: 18px;
+    color: $blue;
 }
 
 :global(.dark) {
     .headerContainer {
-        background-color: $dark-mode-dark-gray;
+        background-color: $gray;
     }
-    
-    .logoTitle {
-        color: $dark-mode-text-color;
-    }
+
 }

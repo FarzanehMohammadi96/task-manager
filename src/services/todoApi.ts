@@ -9,17 +9,15 @@ interface PaginatedResponse {
   limit: number;
 }
 
-interface CreateTodoRequest {
+
+interface BaseTodoRequest {
   title: string;
   description: string;
   status?: TodoStatus;
 }
 
-interface UpdateTodoRequest {
-  title: string;
-  description: string;
-  status?: TodoStatus;
-}
+type CreateTodoRequest = BaseTodoRequest
+type UpdateTodoRequest = BaseTodoRequest
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {

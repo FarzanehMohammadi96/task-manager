@@ -3,7 +3,7 @@
 import { memo, useCallback } from "react";
 import { useTodoStore } from "@/store/todoStore";
 import { getPagination } from '@/utils/getPagination';
-import styles from "../components/pagination/pagination.module.css";
+import styles from "./pagination.module.scss";
 
 const PaginationComponent = () => {
   const { currentPage, setCurrentPage, limit, total, loading } = useTodoStore();

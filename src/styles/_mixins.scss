@@ -1,0 +1,33 @@
+@use 'colors' as *;
+
+@mixin flex($direction: row, $justify: flex-start, $align: center, $gap: 0) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+    gap: $gap;
+}
+
+@mixin card($bg: #fff, $radius: 12px, $shadow: 0 4px 10px rgba(0, 0, 0, 0.1)) {
+    background: $bg;
+    border-radius: $radius;
+    box-shadow: $shadow;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+@mixin button($color, $bg: transparent, $border: 1px solid $color) {
+    border: $border;
+    color: $color;
+    background: $bg;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+@mixin dark-mode {
+    :global(.dark) & {
+        @content;
+    }
+}
