@@ -133,6 +133,7 @@ export const TaskCard: FC<TaskCardProps> = ({ todo, searchQuery }) => {
                   sizes="60px"
                   width={100}
                   height={120}
+                  loading="lazy"
                 />
               ) : (
                 <div

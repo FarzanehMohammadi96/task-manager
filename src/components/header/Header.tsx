@@ -9,7 +9,7 @@ const Header = () => {
     <div className={styles.headerContainer}>
     <div className={styles.header}>
       <div  className={styles.logoTitle}>
-        <Image src={logo} alt="" width={40} height={40} />
+        <Image src={logo} alt="" width={40} height={40} priority />
         <p>Task Manager</p>
       </div>
       <ThemeToggle />
